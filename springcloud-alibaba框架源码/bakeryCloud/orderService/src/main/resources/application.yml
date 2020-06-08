@@ -1,0 +1,55 @@
+server:
+  port: 8082
+spring:
+  # 多个接口上的@FeignClient(“相同服务名”)会报错，overriding is disabled。
+  # 设置 为true ,即 允许 同名
+  main:
+    allow-bean-definition-overriding: true
+  datasource:
+    # 使用druid数据源
+    type: com.alibaba.druid.pool.DruidDataSource
+    druid:
+      filters: stat,wall
+      min-idle: 10
+      initial-size: 10
+      max-active: 300
+      max-wait: 10000
+      validation-query: SELECT 1 FROM DUAL
+      test-while-idle: true
+      time-between-eviction-runs-millis: 60000
+      min-evictable-idle-time-millis: 300000
+      use-global-data-source-stat: true
+      connection-properties: druid.stat.mergeSql=true;druid.stat.slowSqlMillis=2000
+      web-stat-filter:
+        url-pattern: /*
+        exclusions: '*.js,*.gif,*.jpg,*.bmp,*.png,*.css,*.ico,/druid/*'
+      stat-view-servlet:
+        url-pattern: /druid/*
+        reset-enable: false
+        login-username: admin
+        login-password: 123456
+  cloud:
+    nacos:
+      discovery:
+        server-addr: localhost:8848    #配置nacos地址
+    sentinel:
+      transport:
+        dashboard: localhost:8080   #配置sentinel流量监控
+        port: 8719   #配置默认端口 如果被占用则逐步扫描后续端口直到未被占用
+    alibaba:
+      seata:
+        tx-service-group: bakery_tx_group  #配置alibaba分布式事务解决方案 seata事务组
+management:
+  endpoints:
+    web:
+      exposure:
+        include: "*"
+mybatis:
+  type-aliases-package: com.shop.entity
+  mapper-locations: classpath:mapper/*.xml
+
+mapper:
+    mappers: com.shop.common.mapper.MyMapper
+    not-empty: false
+    identity: MYSQL
+    style: normal

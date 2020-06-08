@@ -1,0 +1,15 @@
+spring:
+  application:
+    name: orderService
+  profiles:
+    active: dev
+  cloud:
+    nacos:
+      config:
+        server-addr: localhost:8848  #配置nacos配置中心地址
+        file-extension: yaml
+        enabled: true
+        group: dev
+        #配置多配制共享
+        shared-dataids: nacos-config-client-dev.yaml,userService-dev.yaml,orderService-dev.yaml
+        refreshable-dataids: nacos-config-client-dev.yaml,userService-dev.yaml,orderService-dev.yaml

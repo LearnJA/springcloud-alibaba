@@ -1,0 +1,29 @@
+spring:
+    datasource:
+        # url: jdbc:mysql://192.168.58.129:8066/baolide?allowMultiQueries=true&useUnicode=true&characterEncoding=UTF-8&useSSL=true&serverTimezone=GMT%2B8
+        url: jdbc:mysql://localhost:3306/seata_storage?allowMultiQueries=true&useUnicode=true&characterEncoding=UTF-8&useSSL=true&serverTimezone=GMT%2B8
+        username: root
+        #password: Root123456..
+        password: 123456
+        driver-class-name: com.mysql.cj.jdbc.Driver
+    messages:
+      basename: i18n/Messages,i18n/Pages
+    #mq相关配置
+    jms:
+      pub-sub-domain: false #为true 表示推送消息 false消费队列消息
+    activemq:
+      user: admin
+      password: admin
+      broker-url: tcp://192.168.10.109:61616
+    #redis相关配置
+    redis:
+      database: 0
+      host: 192.168.10.109
+      port: 6379
+      password: 123456
+
+
+logging:
+    level:
+        root: info
+        com.fuma: debug

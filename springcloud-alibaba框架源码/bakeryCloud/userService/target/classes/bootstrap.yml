@@ -1,0 +1,25 @@
+server:
+  port: 8081
+
+spring:
+  application:
+    name: userService
+  profiles:
+    active: dev
+  cloud:
+    nacos:
+      config:
+        server-addr: localhost:8848  #配置nacos配置中心地址
+        file-extension: yaml
+        #group: dev
+        ext-config[0]:
+          data-id: database.yaml
+          group: dev
+          refresh: true
+        ext-config[1]:
+          data-id: mysql.yaml
+          group: dev
+          refresh: true
+        #配置多配制共享
+        #shared-dataids: database.yaml,mysql.yaml
+        #refreshable-dataids: database.yaml,mysql.yaml

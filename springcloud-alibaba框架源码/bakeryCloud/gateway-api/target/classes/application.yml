@@ -1,0 +1,74 @@
+server:
+  port: 9527
+
+spring:
+  application:
+    name: cloudGateWay
+  profiles:
+      active: dev
+  #cloud alibaba配置
+  cloud:
+    nacos:
+      discovery:
+        server-addr: localhost:8848    #配置nacos地址
+    #alibaba:
+      #seata:
+        #tx-service-group: bakery_tx_group  #配置alibaba分布式事务解决方案 seata事务组
+    gateway:
+      discovery:
+        locator:
+          enabled: true  # 开启从注册中心动态创建路由的功能，利用微服务名进行路由
+      routes:
+        - id: cloudGateWay_routh_user_login   #路由ID,要求唯一，最好和服务名配合生成 不会重复
+          #uri: http://localhost:8081  #提供服务的路由地址（服务访问地址）
+          uri: lb://userService
+          predicates:
+            - Path=/user/login   # 断言，访问路径相匹配的进行路由
+
+        - id: cloudGateWay_routh_user_userOrder   #路由ID,要求唯一，最好和服务名配合生成 不会重复
+          #uri: http://localhost:8081  #提供服务的路由地址（服务访问地址）
+          uri: lb://userService
+          predicates:
+            - Path=/user/userOrder/**   # 断言，访问路径相匹配的进行路由
+
+        - id: cloudGateWay_routh_user_publicPage   #路由ID,要求唯一，最好和服务名配合生成 不会重复
+          #uri: http://localhost:8081  #提供服务的路由地址（服务访问地址）
+          uri: lb://userService
+          predicates:
+            - Path=/user/publicPage/**  # 断言，访问路径相匹配的进行路由
+
+        - id: cloudGateWay_routh_user_configInfo   #路由ID,要求唯一，最好和服务名配合生成 不会重复
+          #uri: http://localhost:8081  #提供服务的路由地址（服务访问地址）
+          uri: lb://userService
+          predicates:
+            - Path=/user/config/info  # 断言，访问路径相匹配的进行路由
+
+        - id: cloudGateWay_routh_order_queryOrder   #路由ID,要求唯一，最好和服务名配合生成 不会重复
+          #uri: http://localhost:8081  #提供服务的路由地址（服务访问地址）
+          uri: lb://orderService
+          predicates:
+            - Path=/order/queryOrder/**  # 断言，访问路径相匹配的进行路由
+
+        - id: cloudGateWay_routh_order_userToken   #路由ID,要求唯一，最好和服务名配合生成 不会重复
+          #uri: http://localhost:8081  #提供服务的路由地址（服务访问地址）
+          uri: lb://orderService
+          predicates:
+            - Path=/order/userToken  # 断言，访问路径相匹配的进行路由
+
+org:
+  my:
+    jwt:
+      #跳过认证的路由
+      skip-auth-urls:
+        - /user/login
+        - /order/userToken
+        - /user/userOrder/**
+        - /user/config/info
+management:
+  endpoints:
+    web:
+      exposure:
+        include: "*"
+
+mybatis:
+  mapper-locations: classpath:mapper/*.xml

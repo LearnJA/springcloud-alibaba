@@ -1,0 +1,26 @@
+spring:
+  cloud:
+    nacos:
+      discovery:
+        server-addr: localhost:8848  #配置nacos注册中心地址
+    sentinel:
+      transport:
+        dashboard: localhost:8080    #配置sentinel地址  本服务将被8080服务监控
+        port: 8719  #配置默认端口8719 如果被占用 自动依次扫描直到找到未被占用的端口
+    alibaba:
+      seata:
+        tx-service-group: bakery_tx_group  #配置alibaba分布式事务解决方案 seata事务组
+management:
+  endpoints:
+    web:
+      exposure:
+        include: "*"
+mybatis:
+  type-aliases-package: com.shop.entity
+  mapper-locations: classpath:mapper/*.xml
+
+mapper:
+    mappers: com.shop.common.mapper.MyMapper
+    not-empty: false
+    identity: MYSQL
+    style: normal
